@@ -80,7 +80,7 @@ class DNSimple(object):
 
     def getdomain(self,domain):
         '''Get the details for a specific domain in your account. .'''
-        return self.__resthelper('/domains/'+domain+'.json')
+        return self.__resthelper('/domains/' + domain + '.json')
 
     def register(self,domainname,registrant_id=None):
         '''Register a domain name with DNSimple and the appropriate domain
@@ -109,11 +109,11 @@ class DNSimple(object):
 
     def adddomains(self, domainname):
         '''Create a single domain in DNSimple in your account.'''
-        postdata = 'domain[name]='+domainname
+        postdata = 'domain[name]=' + domainname
         return self.__resthelper('/domains.json', postdata)          
 
     def delete(self,domain):
         '''Delete the given domain from your account. You may use either the 
         domain ID or the domain name.'''
-        return self.__deletehelper('/domains/'+domain+'.json')
+        return self.__deletehelper('/domains/' + domain + '.json')
                
