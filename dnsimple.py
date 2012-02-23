@@ -1,8 +1,6 @@
-#!/usr/bin/env python
 '''Client for DNSimple REST API
 https://dnsimple.com/documentation/api
 '''
-
 
 import base64
 from urllib2 import Request, urlopen, URLError
@@ -20,33 +18,35 @@ newhttpcodes = {
 for code in newhttpcodes:
     BaseHTTPRequestHandler.responses[code] = newhttpcodes[code]
 
-import simplejson as json
+import json
 import logging
 
 class DNSimple(object):
-    def __init__(self):
-        try:
-            passwordfile = open('.dnsimple').read()
-            username = re.findall(r'username:.*', passwordfile)[0].split(':')[1].strip()
-            password = re.findall(r'password:.*', passwordfile)[0].split(':')[1].strip()
-        except: 
-            logging.warn('Could not open .dnsimple file - see README.markdown')    
-            exit()        
+    def __init__(self, uname, pwd):
+        self.username = uname
+        self.password = pwd
         self.__endpoint = 'https://dnsimple.com'
-        self.__authstring = self.__getauthstring(self.__endpoint,username,password)
+        self.__authstring = self.__getauthstring(
+                                self.__endpoint,
+                                self.username,
+                                self.password)
         self.__useragent = 'DNSimple Python API v20101015'
 
-    def __getauthstring(self,__endpoint,username,password):
-        encodedstring = base64.encodestring(username+':'+password)[:-1]
+    def __getauthstring(self,__endpoint, username, password):
+        encodedstring = base64.b64encode(username+':'+password)
         return "Basic %s" % encodedstring
 
     def __resthelper(self,url,postdata=None):    
         '''Does GET requests and (if postdata specified) POST requests.
-        For POSTs we do NOT encode our data, as DNSimple's REST API expects square brackets
-        which are normally encoded according to RFC 1738. urllib.urlencode encodes square brackets 
-        which the API doesn't like.'''
+        For POSTs we do NOT encode our data, as DNSimple's REST API expects 
+        square brackets which are normally encoded according to RFC 1738. 
+        urllib.urlencode encodes square brackets which the API doesn't like.'''
         url = self.__endpoint+url
-        request = Request(url, postdata, {"Authorization": self.__authstring, "User-Agent": self.__useragent })
+        request = Request(
+                      url, 
+                      postdata, 
+                      {"Authorization": self.__authstring, 
+                       "User-Agent": self.__useragent })
         result = self.__requesthelper(request)
         if result:
             return json.loads(result)        
@@ -82,12 +82,9 @@ class DNSimple(object):
         '''Get the details for a specific domain in your account. .'''
         return self.__resthelper('/domains/'+domain+'.json')
 
-    def getdomain(self,domain):
-        '''Get the details for a specific domain in your account. .'''
-        return self.__resthelper('/domains/'+domain+'.json')
-
     def register(self,domainname,registrant_id=None):
-        '''Register a domain name with DNSimple and the appropriate domain registry. '''
+        '''Register a domain name with DNSimple and the appropriate domain
+        registry. '''
         if not registrant_id:
             # Get the registrant ID from the first domain in the acount
             try:
@@ -95,13 +92,19 @@ class DNSimple(object):
             except:
                 print 'Could not find registrant_id! Please specify manually.'
                 exit
-        postdata = 'domain[name]='+domainname+'&domain[registrant_id]='+str(registrant_id)
+        postdata = ('domain[name]='           +
+                    domainname                +
+                    '&domain[registrant_id]=' +
+                    str(registrant_id)        )
         return self.__resthelper('/domain_registrations.json', postdata)
 
 
     def transfer(self,domainname,registrant_id):
         '''Transfer a domain name from another domain registrar into DNSimple. '''
-        postdata = 'domain[name]='+domainname+'&domain[registrant_id]='+registrant_id
+        postdata = ('domain[name]='           +
+                    domainname                +
+                    '&domain[registrant_id]=' +
+                    str(registrant_id)        )
         return self.__resthelper('/domain_transfers.json', postdata)        
 
     def adddomains(self, domainname):
@@ -110,6 +113,7 @@ class DNSimple(object):
         return self.__resthelper('/domains.json', postdata)          
 
     def delete(self,domain):
-        '''Delete the given domain from your account. You may use either the domain ID or the domain name.'''
+        '''Delete the given domain from your account. You may use either the 
+        domain ID or the domain name.'''
         return self.__deletehelper('/domains/'+domain+'.json')
                
