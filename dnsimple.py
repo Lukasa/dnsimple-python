@@ -3,117 +3,81 @@ https://dnsimple.com/documentation/api
 '''
 
 import base64
-from urllib2 import Request, urlopen, URLError
-import urllib
 import re
-from BaseHTTPServer import BaseHTTPRequestHandler
-# Update Pythons list of error codes with some that are missing
-newhttpcodes = {
-    422:('Unprocessable Entity','HTTP_UNPROCESSABLE_ENTITY'),
-    423:('Locked','HTTP_LOCKED'),
-    424:('Failed Dependency','HTTP_FAILED_DEPENDENCY'),
-    425:('No code','HTTP_NO_CODE'),
-    426:('Upgrade Required','HTTP_UPGRADE_REQUIRED'),
-}
-for code in newhttpcodes:
-    BaseHTTPRequestHandler.responses[code] = newhttpcodes[code]
-
 import json
 import logging
+import requests
 
 class DNSimple(object):
     def __init__(self, uname, pwd):
-        self.username = uname
-        self.password = pwd
         self.__endpoint = 'https://dnsimple.com'
-        self.__authstring = self.__getauthstring(
-                                self.__endpoint,
-                                self.username,
-                                self.password)
+        self.__authdata = (uname, pwd)
         self.__useragent = 'DNSimple Python API v20101015'
+        self.__headers = {"Accept"    : "application/json",
+                          "User-Agent": self.__useragent}
+        self.__session = requests.session(auth    = self.__authdata,
+                                          headers = self.__headers)
 
-    def __getauthstring(self,__endpoint, username, password):
-        encodedstring = base64.b64encode(username+':'+password)
-        return "Basic %s" % encodedstring
-
-    def __resthelper(self,url,postdata=None):    
+    def __resthelper(self,url,postdata=""):    
         '''Does GET requests and (if postdata specified) POST requests.
-        For POSTs we do NOT encode our data, as DNSimple's REST API expects 
-        square brackets which are normally encoded according to RFC 1738. 
-        urllib.urlencode encodes square brackets which the API doesn't like.'''
-        url = self.__endpoint+url
-        request = Request(
-                      url, 
-                      postdata, 
-                      {"Authorization": self.__authstring, 
-                       "User-Agent": self.__useragent })
-        result = self.__requesthelper(request)
-        if result:
-            return json.loads(result)        
+        
+        postdata should be a python dict'''
+        url = self.__endpoint + url
+       
+        # If postdata isn't provided, assume we want a GET.
+        if not postdata:
+            request = self.__session.get(url)
+            request.raise_for_status()
+            return json.loads(request.text)
         else:
-            return None
+            postdata = json.dumps(postdata)
+            request = self.__session.post(url, data=postdata)
 
     def __deletehelper(self,url):    
         '''Does DELETE requests.'''
         raise Exception('Not implemented yet')
                   
-    def __requesthelper(self,request):
-        '''Does requests and maps HTTP responses into delicious Python juice'''
-        try:
-            handle = urlopen(request)            
-        except URLError, e:
-            # Check returned URLError for issues and report 'em
-            if hasattr(e, 'reason'):
-                print 'We failed to reach a server.'
-                print 'Reason: ', e.reason
-                return
-            elif hasattr(e, 'code'):
-                print 'Error code: ', e.code
-                print '\n'.join(BaseHTTPRequestHandler.responses[e.code])
-                return
-        else:
-            return handle.read()    
-        
     def getdomains(self):
         '''Get a list of all domains in your account.'''
-        return self.__resthelper('/domains.json')
+        return self.__resthelper('/domains')
 
     def getdomain(self,domain):
         '''Get the details for a specific domain in your account. .'''
-        return self.__resthelper('/domains/' + domain + '.json')
+        return self.__resthelper('/domains/' + domain)
 
     def register(self,domainname,registrant_id=None):
         '''Register a domain name with DNSimple and the appropriate domain
         registry. '''
         if not registrant_id:
-            # Get the registrant ID from the first domain in the acount
+            # Get the registrant ID from the first domain in the account
             try:
                 registrant_id = self.getdomains()[0]['domain']['registrant_id']
             except:
                 print 'Could not find registrant_id! Please specify manually.'
                 exit
-        postdata = ('domain[name]='           +
-                    domainname                +
-                    '&domain[registrant_id]=' +
-                    str(registrant_id)        )
-        return self.__resthelper('/domain_registrations.json', postdata)
+        
+        postdata = {"domain":{"name": domainname,
+                              "registrant_id": registrant_id}}
+        return self.__resthelper('/domain_registrations', postdata)
 
 
-    def transfer(self,domainname,registrant_id):
-        '''Transfer a domain name from another domain registrar into DNSimple. '''
-        postdata = ('domain[name]='           +
-                    domainname                +
-                    '&domain[registrant_id]=' +
-                    str(registrant_id)        )
-        return self.__resthelper('/domain_transfers.json', postdata)        
+    def transfer(self, domainname, registrant_id, authdata):
+        '''Transfer a domain name from another domain registrar into DNSimple.
+        '''
+        postdata = {"domain"        : {"name": domainname,
+                                       "registrant_id": registrant_id
+                                      },
+                    "transfer_order": {"authinfo" : authdata}
+                    }
+        return self.__resthelper('/domain_transfers', postdata)        
 
     def adddomains(self, domainname):
         '''Create a single domain in DNSimple in your account.'''
-        postdata = 'domain[name]=' + domainname
-        return self.__resthelper('/domains.json', postdata)          
+        postdata = {"domain": {"name": domainname}} 
+        return self.__resthelper('/domains', postdata)          
 
     def delete(self,domain):
         '''Delete the given domain from your account. You may use either the 
         domain ID or the domain name.'''
-        return self.__deletehelper('/domains/' + domain + '.json')
+        return self.__deletehelper('/domains/' + domain)
                
