@@ -21,9 +21,9 @@ Just run:
 
 	domains = dns.getdomains()
 
-Results appear as a Python dict:
+Results appear as list of Python dicts:
 
-	{'domain': {'created_at': '2010-10-14T09:45:32Z',
+	['domain': {'created_at': '2010-10-14T09:45:32Z',
 	            'expires_at': '10/14/2011 5:45:00 AM',
 	            'id': 999,
 	            'last_enom_order_id': None,
