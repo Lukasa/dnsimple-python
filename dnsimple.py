@@ -12,7 +12,7 @@ class DNSimple(object):
     def __init__(self, uname, pwd):
         self.__endpoint = 'https://dnsimple.com'
         self.__authdata = (uname, pwd)
-        self.__useragent = 'DNSimple Python API v20101015'
+        self.__useragent = 'DNSimple Python API v0.1'
         self.__headers = {"Accept"    : "application/json",
                           "User-Agent": self.__useragent}
         self.__session = requests.session(auth    = self.__authdata,
