@@ -7,7 +7,7 @@ This is a client for the DNSimple REST API. It currently allows you to fetch exi
 
 ### Requirements
 
-Before you begin, you will need the excellent [requests[(https://github.com/kennethreitz/requests) module, by Kenneth Reitz. To install it, run either
+Before you begin, you will need the excellent [requests](https://github.com/kennethreitz/requests) module, by Kenneth Reitz. To install it, run either
         
         pip install requests
 
