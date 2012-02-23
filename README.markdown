@@ -5,6 +5,18 @@ Python DNSimple
 
 This is a client for the DNSimple REST API. It currently allows you to fetch existing domain info, as well as bulk-register new domains. More features are on the way.
 
+### Requirements
+
+Before you begin, you will need the excellent [requests[(https://github.com/kennethreitz/requests) module, by Kenneth Reitz. To install it, run either
+        
+        pip install requests
+
+or, if you absolutely must:
+
+        easy_install requests
+
+But, you know, don't do it that way.
+
 ### Getting started
 
 From your code, import the module:
