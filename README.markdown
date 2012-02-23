@@ -7,20 +7,13 @@ This is a client for the DNSimple REST API. It currently allows you to fetch exi
 
 ### Getting started
 
-You'll need the simplejson module installed.
-
-Create a file called .dnsimple in the current dir with the following data:
-
-	username: email@domain.com
-	password: yourpassword
-
-Then import the module:
+From your code, import the module:
 
 	from dnsimple import DNSimple
 
-And create a DNSimple object:	
+Create a DNSimple object, using your username and password.
 	
-	dns = DNSimple() 
+	dns = DNSimple(username, password) 
 
 ### Check out your existing domains:
 
