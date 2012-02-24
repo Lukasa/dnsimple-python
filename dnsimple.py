@@ -56,6 +56,10 @@ class DNSimple(object):
         else:
             raise Exception('Could not find valid method to perform.')
 
+    ###########################################################################
+    # DOMAINS                                                                 #
+    ###########################################################################
+    
     def getdomain(self,domain=""):
         '''Get either a specific domain or all domains in your account.
         
@@ -158,10 +162,18 @@ class DNSimple(object):
         domain must be the domain name or domain id.'''
         return self.__resthelper('delete', '/domains/' + domain)
 
+    ###########################################################################
+    # NAMESERVERS                                                             #
+    ###########################################################################
+    
     def nameservers(self, nameservers="", reset=False):
         '''Change the name servers to either external nameservers or back to
         DNSimple's nameservers.'''
         raise Exception('Not implemented yet.')
+
+    ###########################################################################
+    # SERVICES                                                                #
+    ###########################################################################
 
     def getservices(self, serviceid=""):
         '''Describe all services or a particular service.'''
@@ -188,6 +200,10 @@ class DNSimple(object):
         service must be either the short name of the service or the service id.
         '''
         raise Exception('Not implemented yet.')
+
+    ###########################################################################
+    # RECORDS                                                                 #
+    ###########################################################################
 
     def get_record(self, domain, record_id=""):
         '''Display all records or a specific record associated with a given
@@ -217,6 +233,10 @@ class DNSimple(object):
         record_id must be the record id.'''
         raise Exception('Not implemented yet.')
 
+    ###########################################################################
+    # VANITY NAME SERVERS                                                     #
+    ###########################################################################
+
     def enable_vanity_name_servers(self, domain):
         '''Enable vanity name servers for the given domain.
         
@@ -229,6 +249,10 @@ class DNSimple(object):
         domain must be the domain name or id.'''
         raise Exception('Not implemented yet.')
 
+    ###########################################################################
+    # CONTACTS                                                                #
+    ###########################################################################
+    
     def get_contact(self, contact_id=""):
         '''Get all contacts or a specific contact from the account
         
@@ -251,6 +275,10 @@ class DNSimple(object):
         contact_id must be the contact id.'''
         raise Exception('Not implemented yet.')
 
+    ###########################################################################
+    # TEMPLATES                                                               #
+    ###########################################################################
+    
     def get_template(self, template=""):
         '''Get all templates or a specific template from the account.
 
@@ -275,6 +303,10 @@ class DNSimple(object):
         template must be the short name or ID for the template.'''
         raise Exception('Not implemented yet.')
 
+    ###########################################################################
+    # TEMPLATE RECORDS                                                        #
+    ###########################################################################
+    
     def get_template_record(self, template, record_id=""):
         '''Get either all the template records for a template, or a specific
         record.
@@ -296,12 +328,20 @@ class DNSimple(object):
         record_id must be the record id.'''
         raise Exception('Not implemented yet.')
 
+    ###########################################################################
+    # EXTENDED ATTRIBUTES                                                     #
+    ###########################################################################
+
     def required_extended_attributes(self, tld):
         '''Get details on the required extended attributes for a particular
         top-level domain.
 
         tld must be the relevant top-level domain.'''
         raise Exception('Not implemented yet.')
+
+    ###########################################################################
+    # WHOIS PRIVACY PROTECTION                                                #
+    ###########################################################################
 
     def enable_privacy_protection(self, domain):
         '''Turn on WHOIS privacy protection for a given domain.
@@ -315,6 +355,10 @@ class DNSimple(object):
         domain must be the domain name or id.'''
         raise Exception('Not implemented yet.')
 
+    ###########################################################################
+    # SHARING                                                                 #
+    ###########################################################################
+    
     def get_domain_members(self, domain):
         '''List all of the current members for a domain.
 
@@ -334,6 +378,10 @@ class DNSimple(object):
         email must be the email address of the member.'''
         raise Exception('Not implemented yet.')
 
+    ###########################################################################
+    # SSL CERTIFICATES                                                        #
+    ###########################################################################
+    
     def get_ssl_certificate(self, domain, cert_id=""):
         '''Get either all of the certificates or a specific certificate
         associated with a given domain.
@@ -357,6 +405,10 @@ class DNSimple(object):
         cert_id must be the id for the certificate created by purchasing it.
         '''
         raise Exception('Not implemented yet.')
+
+    ###########################################################################
+    # USERS                                                                   #
+    ###########################################################################
 
     def create_user_account(self):
         '''Provision a new user account.'''
