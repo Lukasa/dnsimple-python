@@ -45,8 +45,14 @@ class DNSimple(object):
                                           headers = extra_header)
             return json.loads(request.text)
        
-        elif (method == "put"):
-            pass
+        elif ((method == "put") and data):
+            # Refuse to put without data.
+            extra_header = {"Content-Type": "application/json"}
+            postdata = json.dumps(data)
+            request = self.__session.put(url,
+                                         data = postdata,
+                                         headers = extra_header)
+            return json.loads(request.text)
         
         elif (method == "delete"):
             request = self.__session.delete(url)
@@ -288,12 +294,35 @@ class DNSimple(object):
                                  '/domains/' + domain + '/records',
                                  data = postdata)
 
-    def update_record(self, domain, record_id):
+    def update_record(self,
+                      domain,
+                      record_id,
+                      record_name="",
+                      record_content="",
+                      record_ttl="",
+                      record_prio=""):
         '''Update the given record for a given domain
         
         domain must be the domain name or id.
-        record_id must be the record id.'''
-        raise Exception('Not implemented yet.')
+        record_id must be the record id.
+        Any or all of the other options may be provided.'''
+        postdata = {"record": {}}
+
+        if record_name:
+            (postdata["record"])["name"] = record_name
+
+        if record_content:
+            (postdata["record"])["content"] = record_content
+
+        if record_ttl:
+            (postdata["record"])["ttl"] = record_ttl
+
+        if record_prio:
+            (postdata["record"])["prio"] = record_prio
+
+        return self.__resthelper('put',
+                                 '/domains/' + domain + '/records/' + record_id,
+                                 data = postdata)
 
     def delete_record(self, domain, record_id):
         '''Delete the record with the given id for the given domain.
