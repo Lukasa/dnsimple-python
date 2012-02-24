@@ -43,6 +43,7 @@ class DNSimple(object):
             request = self.__session.post(url,
                                           data = postdata, 
                                           headers = extra_header)
+            return json.loads(request.text)
        
         elif (method == "put"):
             pass
