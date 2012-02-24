@@ -47,10 +47,6 @@ class DNSimple(object):
         else:
             raise Exception('Could not find valid method to perform.')
 
-    def __deletehelper(self,url):    
-        '''Does DELETE requests.'''
-        raise Exception('Not implemented yet')
-
     def getdomain(self,domain=""):
         '''Get either a specific domain or all domains in your account.
         
