@@ -221,8 +221,11 @@ class DNSimple(object):
                                  '/domains/' + domain + '/applied_services')
 
     def get_available_services(self, domain):
-        '''List services available for a domain.'''
-        raise Exception('Not implemented yet.')
+        '''List services available for a domain.
+        
+        domain must be a domain name or id.'''
+        return self.__resthelper('get',
+                                 '/domains/' + domain + '/available_services')
 
     def apply_service(self, service):
         '''Add a services to a domain.
