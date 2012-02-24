@@ -127,7 +127,7 @@ class DNSimple(object):
         postdata = {"domain": {"name": domainname}}
 
         if renew_whois:
-            postdata["domain"]["renew_whois_privacy"] = "True"
+            postdata["domain"]["renew_whois_privacy"] = {}
 
         return self.__resthelper('post',
                                  '/domain_renewal',
@@ -144,8 +144,11 @@ class DNSimple(object):
                                  data = postdata)
 
     def disable_auto_renewal(self, domain):
-        '''Disable auto renewal for a domain.'''
-        raise Exception('Not implemented yet.')
+        '''Disable auto renewal for a domain.
+        
+        domain must be the domain name or domain id.'''
+        return self.__resthelper('delete',
+                                 '/domains/' + domain + '/auto_renewal')
     
     def deletedomain(self,domain):
         '''Delete the given domain from your account. You may use either the 
