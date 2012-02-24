@@ -166,10 +166,44 @@ class DNSimple(object):
     # NAMESERVERS                                                             #
     ###########################################################################
     
-    def nameservers(self, nameservers="", reset=False):
+    def nameservers(self, domain, nameservers="", reset=False):
         '''Change the name servers to either external nameservers or back to
-        DNSimple's nameservers.'''
-        raise Exception('Not implemented yet.')
+        DNSimple's nameservers.
+        
+        Either nameservers must be provided or reset must be true. If
+        nameservers are provided, they should be in the form of a Python dict,
+        with keys in the form 'ns1', 'ns2' etc., and values being hostnames.
+        Provide no more than 6.
+        
+        If reset is true, the nameservers will be set back to DNSimple's.
+        
+        domain must be either the domain name or id.'''
+        default_nameservers = {"ns1": "ns1.dnsimple.com",
+                               "ns2": "ns2.dnsimple.com",
+                               "ns3": "ns3.dnsimple.com",
+                               "ns4": "ns4.dnsimple.com"}
+
+        if (nameservers and reset):
+            raise ValueError("Provide either nameservers or reset, not both.")
+        
+        elif nameservers:
+            if ((not isinstance(nameservers, dict)) and 
+                                                      (len(nameservers) < 7)):
+                postdata = {"name_servers": nameservers}
+            
+            else:
+                raise ValueError("nameservers must be a dict " +
+                                 "of length 6 or less.")
+        
+        elif reset:
+            postdata = {"name_servers": default_nameservers}
+        
+        else:
+            raise ValueError("Must provide either nameservers or reset.")
+
+        return self.__resthelper('post',
+                                 '/domains/' + domain + '/name_servers',
+                                 data = postdata)
 
     ###########################################################################
     # SERVICES                                                                #
