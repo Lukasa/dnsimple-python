@@ -238,12 +238,15 @@ class DNSimple(object):
                                  '/domains/' + domain + '/applied_services',
                                  data = postdata)
 
-    def remove_service(self, service):
+    def remove_service(self, domain, service_id):
         '''Remove a service from a domain.
         
-        service must be either the short name of the service or the service id.
+        domain must be either the domain name or domain id.
+        service_id must be the service id.
         '''
-        raise Exception('Not implemented yet.')
+        return self.__resthelper('delete',
+                                 ('/domains/' + domain + 
+                                  '/applied_services/' + service_id))
 
     ###########################################################################
     # RECORDS                                                                 #
