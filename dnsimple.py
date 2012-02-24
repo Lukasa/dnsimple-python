@@ -227,12 +227,16 @@ class DNSimple(object):
         return self.__resthelper('get',
                                  '/domains/' + domain + '/available_services')
 
-    def apply_service(self, service):
+    def apply_service(self, domain, service):
         '''Add a services to a domain.
         
+        domain must be either the domain name or the domain id.
         service must be either the short name of the service or the service id.
         '''
-        raise Exception('Not implemented yet.')
+        postdata = {"service": {"name_or_id": service}}
+        return self.__resthelper('post',
+                                 '/domains/' + domain + '/applied_services',
+                                 data = postdata)
 
     def remove_service(self, service):
         '''Remove a service from a domain.
