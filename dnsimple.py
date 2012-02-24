@@ -211,7 +211,7 @@ class DNSimple(object):
 
     def getservices(self, serviceid=""):
         '''Describe all services or a particular service.'''
-        raise Exception('Not implemented yet.')
+        return self.__resthelper('get', '/services/' + serviceid)
 
     def get_applied_services(self, domain):
         '''List services already applied to a domain.'''
