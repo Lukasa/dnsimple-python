@@ -134,8 +134,14 @@ class DNSimple(object):
                                  data = postdata)
 
     def enable_auto_renewal(self, domain):
-        '''Enable auto renewal for a domain.'''
-        raise Exception('Not implemented yet.')
+        '''Enable auto renewal for a domain.
+        
+        domain must be the domain name or domain id.'''
+        postdata = {"auto_renewal": {}}
+        
+        return self.__resthelper('post',
+                                 '/domains/' + domain + '/auto_renewal',
+                                 data = postdata)
 
     def disable_auto_renewal(self, domain):
         '''Disable auto renewal for a domain.'''
