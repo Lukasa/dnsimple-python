@@ -72,9 +72,18 @@ class DNSimple(object):
                                  '/domains/' + domainname + '/check',
                                  expect_404=True)
 
-    def registerdomain(self,domainname,registrant_id=""):
+    def registerdomain(self,
+                       domainname,
+                       registrant_id="",
+                       extended_attributes={}):
         '''Register a domain name with DNSimple and the appropriate domain
-        registry. '''
+        registry.
+        
+        registrant_id can be inferred from the first domain in the account if
+        not provided.
+        
+        Some domains require extended attributes. If you need them, you must
+        provide them. They are expected to be a Python dict.'''
         if not registrant_id:
             # Get the registrant ID from the first domain in the account
             try:
@@ -85,8 +94,11 @@ class DNSimple(object):
         
         postdata = {"domain":{"name": domainname,
                               "registrant_id": registrant_id}}
-        return self.__resthelper('post', '/domain_registrations', postdata)
 
+        if (extended_attributes and isinstance(extended_attributes, dict)):
+            (postdata["domain"])["extended_attribute"] = extended_attributes
+
+        return self.__resthelper('post', '/domain_registrations', postdata)
 
     def transferdomain(self, domainname, registrant_id, authdata=""):
         '''Transfer a domain name from another domain registrar into DNSimple.
