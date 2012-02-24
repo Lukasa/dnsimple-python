@@ -49,7 +49,9 @@ class DNSimple(object):
             pass
         
         elif (method == "delete"):
-            pass
+            request = self.__session.delete(url)
+            request.raise_for_status()
+            return json.loads(request.text)
         
         else:
             raise Exception('Could not find valid method to perform.')
