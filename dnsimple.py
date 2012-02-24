@@ -261,11 +261,32 @@ class DNSimple(object):
         return self.__resthelper('get',
                                  '/domains/' + domain + '/records/' + record_id)
 
-    def create_record(self, domain):
+    def create_record(self,
+                      domain,
+                      record_name,
+                      record_type,
+                      record_content,
+                      record_ttl='',
+                      record_prio=''):
         '''Create a record for the given domain.
         
-        domain must be the domain name or id.'''
-        raise Exception('Not implemented yet.')
+        domain must be the domain name or id.
+        You must provide the record name, type and content. The TTL and PRIO
+        are optional.'''
+        postdata = {"record": {"name"       : record_name,
+                               "record_type": record_type,
+                               "content"    : record_content}
+                   }
+
+        if record_ttl:
+            (postdata["record"])["ttl"] = record_ttl
+
+        if record_prio:
+            (postdata["record"])["prio"] = record_prio
+
+        return self.__resthelper('post',
+                                 '/domains/' + domain + '/records',
+                                 data = postdata)
 
     def update_record(self, domain, record_id):
         '''Update the given record for a given domain
