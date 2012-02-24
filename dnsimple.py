@@ -329,7 +329,8 @@ class DNSimple(object):
         
         domain must be the domain name or id.
         record_id must be the record id.'''
-        raise Exception('Not implemented yet.')
+        return self.__resthelper('delete',
+                                 '/domains/' + domain + '/records/' + record_id)
 
     ###########################################################################
     # VANITY NAME SERVERS                                                     #
