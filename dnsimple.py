@@ -16,7 +16,7 @@ class DNSimple(object):
         self.__session = requests.session(auth    = self.__authdata,
                                           headers = self.__headers)
 
-    def __resthelper(self, method, url, data=""):    
+    def __resthelper(self, method, url, data="", expect_404=False):    
         '''Handles requests.
         
         url is the url for the request
@@ -27,7 +27,13 @@ class DNSimple(object):
         # No assumptions. Check the method given.
         if (method == 'get'):
             request = self.__session.get(url)
-            request.raise_for_status()
+            
+            # For reasons totally opaque to me, some methods of the DNSimple
+            # API legitimately return a 404. We don't want to die when that
+            # happens, so be careful.
+            if (expect_404 and (request.status_code == 404)): pass
+            else:
+                request.raise_for_status()
             return json.loads(request.text)
         
         elif ((method == "post") and data):
@@ -61,7 +67,9 @@ class DNSimple(object):
 
     def checkdomain(self, domainname):
         '''Check if a given domain is available for registration.'''
-        raise Exception('Not implemented yet')
+        return self.__resthelper('get',
+                                 '/domains/' + domainname + '/check',
+                                 expect_404=True)
 
     def register(self,domainname,registrant_id=""):
         '''Register a domain name with DNSimple and the appropriate domain
