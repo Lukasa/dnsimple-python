@@ -152,10 +152,11 @@ class DNSimple(object):
         return self.__resthelper('delete',
                                  '/domains/' + domain + '/auto_renewal')
     
-    def deletedomain(self,domain):
-        '''Delete the given domain from your account. You may use either the 
-        domain ID or the domain name.'''
-        return self.__deletehelper('delete', '/domains/' + domain)
+    def deletedomain(self, domain):
+        '''Delete the given domain from your account.
+        
+        domain must be the domain name or domain id.'''
+        return self.__resthelper('delete', '/domains/' + domain)
 
     def nameservers(self, nameservers="", reset=False):
         '''Change the name servers to either external nameservers or back to
