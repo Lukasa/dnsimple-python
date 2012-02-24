@@ -87,14 +87,18 @@ class DNSimple(object):
         return self.__resthelper('post', '/domain_registrations', postdata)
 
 
-    def transferdomain(self, domainname, registrant_id, authdata):
+    def transferdomain(self, domainname, registrant_id, authdata=""):
         '''Transfer a domain name from another domain registrar into DNSimple.
+
+        Some TLDs require authorization codes. If it does, it's your job to
+        get it and pass it into the authdata field.
         '''
-        postdata = {"domain"        : {"name": domainname,
-                                       "registrant_id": registrant_id
-                                      },
-                    "transfer_order": {"authinfo" : authdata}
-                    }
+        postdata = {"domain": {"name": domainname,
+                               "registrant_id": registrant_id}}
+        
+        if authdata:
+            postdata["transfer_order"] = {"authinfo": authdata}
+        
         return self.__resthelper('post', '/domain_transfers', postdata)        
 
     def renewdomain(self, domainname):
