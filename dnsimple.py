@@ -258,7 +258,8 @@ class DNSimple(object):
         
         domain must be the domain name or id.
         record_id must be absent, the emptry string or the record id.'''
-        raise Exception('Not implemented yet.')
+        return self.__resthelper('get',
+                                 '/domains/' + domain + '/records/' + record_id)
 
     def create_record(self, domain):
         '''Create a record for the given domain.
