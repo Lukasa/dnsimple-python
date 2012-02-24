@@ -64,7 +64,7 @@ class DNSimple(object):
     def createdomain(self, domainname):
         '''Create a single domain in DNSimple in your account.'''
         postdata = {"domain": {"name": domainname}} 
-        return self.__resthelper('post', '/domains', postdata)
+        return self.__resthelper('post', '/domains', data = postdata)
 
     def checkdomain(self, domainname):
         '''Check if a given domain is available for registration.'''
@@ -98,7 +98,9 @@ class DNSimple(object):
         if (extended_attributes and isinstance(extended_attributes, dict)):
             (postdata["domain"])["extended_attribute"] = extended_attributes
 
-        return self.__resthelper('post', '/domain_registrations', postdata)
+        return self.__resthelper('post',
+                                 '/domain_registrations',
+                                 data = postdata)
 
     def transferdomain(self, domainname, registrant_id, authdata=""):
         '''Transfer a domain name from another domain registrar into DNSimple.
@@ -112,11 +114,24 @@ class DNSimple(object):
         if authdata:
             postdata["transfer_order"] = {"authinfo": authdata}
         
-        return self.__resthelper('post', '/domain_transfers', postdata)        
+        return self.__resthelper('post',
+                                 '/domain_transfers',
+                                 data = postdata)        
 
-    def renewdomain(self, domainname):
-        '''Renew a domain name in your account.'''
-        raise Exception('Not implemented yet')
+    def renewdomain(self, domainname, renew_whois=False):
+        '''Renew a domain name in your account.
+        
+        domainname must be the domain name
+        renew_whois is optional. Set to true if you wish to renew the whois
+        privacy.'''
+        postdata = {"domain": {"name": domainname}}
+
+        if renew_whois:
+            postdata["domain"]["renew_whois_privacy"] = "True"
+
+        return self.__resthelper('post',
+                                 '/domain_renewal',
+                                 data = postdata)
 
     def enable_auto_renewal(self, domain):
         '''Enable auto renewal for a domain.'''
