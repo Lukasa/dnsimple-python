@@ -71,7 +71,7 @@ class DNSimple(object):
                                  '/domains/' + domainname + '/check',
                                  expect_404=True)
 
-    def register(self,domainname,registrant_id=""):
+    def registerdomain(self,domainname,registrant_id=""):
         '''Register a domain name with DNSimple and the appropriate domain
         registry. '''
         if not registrant_id:
@@ -87,7 +87,7 @@ class DNSimple(object):
         return self.__resthelper('post', '/domain_registrations', postdata)
 
 
-    def transfer(self, domainname, registrant_id, authdata):
+    def transferdomain(self, domainname, registrant_id, authdata):
         '''Transfer a domain name from another domain registrar into DNSimple.
         '''
         postdata = {"domain"        : {"name": domainname,
@@ -109,7 +109,7 @@ class DNSimple(object):
         '''Disable auto renewal for a domain.'''
         raise Exception('Not implemented yet.')
     
-    def delete(self,domain):
+    def deletedomain(self,domain):
         '''Delete the given domain from your account. You may use either the 
         domain ID or the domain name.'''
         return self.__deletehelper('delete', '/domains/' + domain)
