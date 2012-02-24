@@ -50,13 +50,12 @@ class DNSimple(object):
     def __deletehelper(self,url):    
         '''Does DELETE requests.'''
         raise Exception('Not implemented yet')
-                  
-    def getdomains(self):
-        '''Get a list of all domains in your account.'''
-        return self.__resthelper('get', '/domains')
 
-    def getdomain(self,domain):
-        '''Get the details for a specific domain in your account. .'''
+    def getdomain(self,domain=""):
+        '''Get either a specific domain or all domains in your account.
+        
+        domain may be absent, blank, the name of a domain or the id of a
+        domain'''
         return self.__resthelper('get', '/domains/' + domain)
 
     def createdomain(self, domainname):
@@ -68,7 +67,7 @@ class DNSimple(object):
         '''Check if a given domain is available for registration.'''
         raise Exception('Not implemented yet')
 
-    def register(self,domainname,registrant_id=None):
+    def register(self,domainname,registrant_id=""):
         '''Register a domain name with DNSimple and the appropriate domain
         registry. '''
         if not registrant_id:
@@ -116,12 +115,8 @@ class DNSimple(object):
         DNSimple's nameservers.'''
         raise Exception('Not implemented yet.')
 
-    def getservices(self):
-        '''Get a list of all the services supported.'''
-        raise Exception('Not implemented yet.')
-
-    def getservices(self, serviceid):
-        '''Describe a particular services by ID.'''
+    def getservices(self, serviceid=""):
+        '''Describe all services or a particular service.'''
         raise Exception('Not implemented yet.')
 
     def get_applied_services(self, domain):
@@ -146,17 +141,12 @@ class DNSimple(object):
         '''
         raise Exception('Not implemented yet.')
 
-    def get_records(self, domain):
-        '''Get a list of records for a specific domain.
-        
-        domain must be the domain name or id.'''
-        raise Exception('Not implemented yet.')
-
-    def get_record(self, domain, record_id):
-        '''Display details about a specific record.
+    def get_record(self, domain, record_id=""):
+        '''Display all records or a specific record associated with a given
+        domain.
         
         domain must be the domain name or id.
-        record_id must be the record id.'''
+        record_id must be absent, the emptry string or the record id.'''
         raise Exception('Not implemented yet.')
 
     def create_record(self, domain):
@@ -191,16 +181,10 @@ class DNSimple(object):
         domain must be the domain name or id.'''
         raise Exception('Not implemented yet.')
 
-    def get_contacts(self, domain):
-        '''Get a list of all the contacts in the account.
+    def get_contact(self, contact_id=""):
+        '''Get all contacts or a specific contact from the account
         
-        domain must be the domain name or id.'''
-        raise Exception('Not implemented yet.')
-
-    def get_contact(self, contact_id):
-        '''List a specific contact in the account using the contact_id.
-        
-        contact_id must be the contact id.'''
+        contact_id must be absent, the empty string or the contact id.'''
         raise Exception('Not implemented yet.')
 
     def create_contact(self):
@@ -219,14 +203,11 @@ class DNSimple(object):
         contact_id must be the contact id.'''
         raise Exception('Not implemented yet.')
 
-    def get_templates(self):
-        '''List all of the custom templates in the account.'''
-        raise Exception('Not implemented yet.')
+    def get_template(self, template=""):
+        '''Get all templates or a specific template from the account.
 
-    def get_template(self, template):
-        '''Get a specific template.
-
-        template must be the template short name or id.'''
+        template must be absent, the empty string or the template short name or
+        id.'''
         raise Exception('Not implemented yet.')
 
     def create_template(self):
@@ -246,17 +227,12 @@ class DNSimple(object):
         template must be the short name or ID for the template.'''
         raise Exception('Not implemented yet.')
 
-    def get_template_records(self, template):
-        '''List the template records for a template.
-
-        template must be the short name or id for a template.'''
-        raise Exception('Not implemented yet.')
-
-    def get_template_record(self, template, record_id):
-        '''View a specific template record.
+    def get_template_record(self, template, record_id=""):
+        '''Get either all the template records for a template, or a specific
+        record.
 
         template must be the short name or id for a template.
-        record_id must be the record id.'''
+        record_id must be absent, the empty string or the record id.'''
         raise Exception('Not implemented yet.')
 
     def create_template_record(self, template):
@@ -310,17 +286,12 @@ class DNSimple(object):
         email must be the email address of the member.'''
         raise Exception('Not implemented yet.')
 
-    def get_ssl_certificates(self, domain):
-        '''Get a list of certificates purchased under the given domain.
-
-        domain must be the domain name or id.'''
-        raise Exception('Not implemented yet.')
-
-    def get_ssl_certificate(self, domain, cert_id):
-        '''Get a specificate certificate purchased under the given domain.
+    def get_ssl_certificate(self, domain, cert_id=""):
+        '''Get either all of the certificates or a specific certificate
+        associated with a given domain.
 
         domain must be the domain name or id.
-        cert_id must be the certificate id.'''
+        cert_id must be absent, the empty string, or the certificate id.'''
         raise Exception('Not implemented yet.')
 
     def purchase_ssl_certificate_for_domain(self, domain):
@@ -342,4 +313,3 @@ class DNSimple(object):
     def create_user_account(self):
         '''Provision a new user account.'''
         raise Exception('Not implemented yet.')
-        
