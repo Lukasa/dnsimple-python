@@ -2,10 +2,8 @@
 https://dnsimple.com/documentation/api
 '''
 
-import base64
 import re
 import json
-import logging
 import requests
 
 class DNSimple(object):
@@ -18,20 +16,36 @@ class DNSimple(object):
         self.__session = requests.session(auth    = self.__authdata,
                                           headers = self.__headers)
 
-    def __resthelper(self,url,postdata=""):    
-        '''Does GET requests and (if postdata specified) POST requests.
+    def __resthelper(self, method, url, data=""):    
+        '''Handles requests.
         
+        url is the url for the request
+        method should be a string indicating the method, e.g. 'get'
         postdata should be a python dict'''
         url = self.__endpoint + url
        
-        # If postdata isn't provided, assume we want a GET.
-        if not postdata:
+        # No assumptions. Check the method given.
+        if (method == 'get'):
             request = self.__session.get(url)
             request.raise_for_status()
             return json.loads(request.text)
+        
+        elif ((method == "post") && data):
+            # Refuse to post without data.
+            extra_header = {"Content-Type": "application/json"}
+            postdata = json.dumps(data)
+            request = self.__session.post(url,
+                                          data = postdata, 
+                                          headers = extra_header)
+       
+        elif (method == "put"):
+            pass
+        
+        elif (method == "delete"):
+            pass
+        
         else:
-            postdata = json.dumps(postdata)
-            request = self.__session.post(url, data=postdata)
+            raise Exception('Could not find valid method to perform.')
 
     def __deletehelper(self,url):    
         '''Does DELETE requests.'''
@@ -39,16 +53,16 @@ class DNSimple(object):
                   
     def getdomains(self):
         '''Get a list of all domains in your account.'''
-        return self.__resthelper('/domains')
+        return self.__resthelper('get', '/domains')
 
     def getdomain(self,domain):
         '''Get the details for a specific domain in your account. .'''
-        return self.__resthelper('/domains/' + domain)
+        return self.__resthelper('get', '/domains/' + domain)
 
     def createdomain(self, domainname):
         '''Create a single domain in DNSimple in your account.'''
         postdata = {"domain": {"name": domainname}} 
-        return self.__resthelper('/domains', postdata)
+        return self.__resthelper('post', '/domains', postdata)
 
     def checkdomain(self, domainname):
         '''Check if a given domain is available for registration.'''
@@ -67,7 +81,7 @@ class DNSimple(object):
         
         postdata = {"domain":{"name": domainname,
                               "registrant_id": registrant_id}}
-        return self.__resthelper('/domain_registrations', postdata)
+        return self.__resthelper('post', '/domain_registrations', postdata)
 
 
     def transfer(self, domainname, registrant_id, authdata):
@@ -78,7 +92,7 @@ class DNSimple(object):
                                       },
                     "transfer_order": {"authinfo" : authdata}
                     }
-        return self.__resthelper('/domain_transfers', postdata)        
+        return self.__resthelper('post', '/domain_transfers', postdata)        
 
     def renewdomain(self, domainname):
         '''Renew a domain name in your account.'''
@@ -95,7 +109,7 @@ class DNSimple(object):
     def delete(self,domain):
         '''Delete the given domain from your account. You may use either the 
         domain ID or the domain name.'''
-        return self.__deletehelper('/domains/' + domain)
+        return self.__deletehelper('delete', '/domains/' + domain)
 
     def nameservers(self, nameservers="", reset=False):
         '''Change the name servers to either external nameservers or back to
