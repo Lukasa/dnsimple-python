@@ -30,7 +30,7 @@ class DNSimple(object):
             request.raise_for_status()
             return json.loads(request.text)
         
-        elif ((method == "post") && data):
+        elif ((method == "post") and data):
             # Refuse to post without data.
             extra_header = {"Content-Type": "application/json"}
             postdata = json.dumps(data)
