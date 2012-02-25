@@ -499,24 +499,37 @@ class DNSimple(object):
 
         template must be absent, the empty string or the template short name or
         id.'''
-        raise Exception('Not implemented yet.')
+        return self.__resthelper('get',
+                                 '/templates/' + template)
 
-    def create_template(self):
+    def create_template(self, name, short_name, description=""):
         '''Create a custom template.'''
-        raise Exception('Not implemented yet.')
+        postdata = {"dns_template": {"name"      : name,
+                                     "short_name": short_name}
+                   }
+
+        if description:
+            (postdata["dns_template"])["description"] = description
+
+        return self.__resthelper('post',
+                                 '/templates',
+                                 data = postdata)
 
     def delete_template(self, template):
         '''Delete a given template.
 
         template must be the template short name or id.'''
-        raise Exception('Not implemented yet.')
+        return self.__resthelper('delete',
+                                 '/templates/' + template)
 
     def apply_template_to_domain(self, domain, template):
         '''Apply a template to a domain.
 
         domain must be the domain name or ID for the domain.
         template must be the short name or ID for the template.'''
-        raise Exception('Not implemented yet.')
+        return self.__resthelper('post',
+                                 ('/domains/' + domain + '/templates/' +
+                                  template + '/apply'))
 
     ###########################################################################
     # TEMPLATE RECORDS                                                        #
