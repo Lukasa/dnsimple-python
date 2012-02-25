@@ -381,23 +381,114 @@ class DNSimple(object):
         '''Get all contacts or a specific contact from the account
         
         contact_id must be absent, the empty string or the contact id.'''
-        raise Exception('Not implemented yet.')
+        return self.__resthelper('get',
+                                 '/contacts/' + contact_id)
 
-    def create_contact(self):
-        '''Create a contact in DNSimple.'''
-        raise Exception('Not implemented yet.')
+    def create_contact(self,
+                       first_name,
+                       last_name,
+                       address1,
+                       city,
+                       state_province,
+                       postal_code,
+                       country,
+                       email_address,
+                       phone,
+                       org_name="",
+                       job_title="",
+                       fax="",
+                       phone_ext="",
+                       label=""):
+        '''Create a contact in DNSimple.
+        
+        All the variables, required or optional, are expected to be strings.'''
+        postdata = {"contact":
+                       {"first_name"    : first_name,
+                        "last_name"     : last_name,
+                        "address1"      : address1,
+                        "city"          : city,
+                        "state_province": state_province,
+                        "postal_code"   : postal_code,
+                        "country"       : country,
+                        "email_address" : email_address,
+                        "phone"         : phone}
+                   }
 
-    def update_contact(self, contact_id):
+        if org_name:
+            (postdata["contact"])["organization_name"] = org_name
+        
+        if job_title:
+            (postdata["contact"])["job_title"] = job_title
+        
+        if fax:
+            (postdata["contact"])["fax"] = fax
+        
+        if phone_ext:
+            (postdata["contact"])["phone_ext"] = phone_ext
+        
+        if label:
+            (postdata["contact"])["label"] = label
+
+        return self.__resthelper('post',
+                                 '/contacts',
+                                 data = postdata)
+
+    def update_contact(self,
+                       contact_id,
+                       first_name,
+                       last_name,
+                       address1,
+                       city,
+                       state_province,
+                       postal_code,
+                       country,
+                       email_address,
+                       phone,
+                       org_name="",
+                       job_title="",
+                       fax="",
+                       phone_ext="",
+                       label=""):
         '''Update a contact in DNSimple.
         
         contact_id must be the contact id.'''
-        raise Exception('Not implemented yet.')
+        postdata = {"contact":
+                       {"first_name"    : first_name,
+                        "last_name"     : last_name,
+                        "address1"      : address1,
+                        "city"          : city,
+                        "state_province": state_province,
+                        "postal_code"   : postal_code,
+                        "country"       : country,
+                        "email_address" : email_address,
+                        "phone"         : phone}
+                   }
+
+        if org_name:
+            (postdata["contact"])["organization_name"] = org_name
+        
+        if job_title:
+            (postdata["contact"])["job_title"] = job_title
+        
+        if fax:
+            (postdata["contact"])["fax"] = fax
+        
+        if phone_ext:
+            (postdata["contact"])["phone_ext"] = phone_ext
+        
+        if label:
+            (postdata["contact"])["label"] = label
+
+        return self.__resthelper("put",
+                                 "/contacts/" + contact_id,
+                                 postdata)
 
     def delete_contact(self, contact_id):
         '''Delete a contact from DNSimple.
 
         contact_id must be the contact id.'''
-        raise Exception('Not implemented yet.')
+        return self.__resthelper('delete',
+                                 '/contacts/' + contact_id)
 
     ###########################################################################
     # TEMPLATES                                                               #
