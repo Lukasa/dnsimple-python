@@ -336,17 +336,42 @@ class DNSimple(object):
     # VANITY NAME SERVERS                                                     #
     ###########################################################################
 
-    def enable_vanity_name_servers(self, domain):
+    def enable_vanity_name_servers(self,
+                                   domain,
+                                   server_source,
+                                   nameservers={}):
         '''Enable vanity name servers for the given domain.
         
-        domain must be the domain name or id.'''
-        raise Exception('Not implemented yet.')
+        domain must be the domain name or id.
+        server_source must be either "dnsimple" or "external".
+        If server_source is "external", nameservers must be a dictionary of
+        nameservers, with keys ns1 through ns4.'''
+        keystring = "vanity_nameserver_configuration"
+        postdata = {keystring: {"server_source": server_source}}
+                                              
+        if (server_source == "dnsimple"):
+            pass
+        
+        elif (server_source == "external"
+              and nameservers
+              and isinstance(nameservers, dict)):
+            
+            for k, v in nameservers.items():
+                (postdata[server_source])[k] = v
+        
+        else:
+            raise ValueError("Incorrect parameters passed to method.")
+        
+        return self.__resthelper('post',
+                                 '/domains/' + domain + '/vanity_name_servers',
+                                 data = postdata)
 
     def disable_vanity_name_servers(self, domain):
         '''Disable vanity name servers for the given domain.
         
         domain must be the domain name or id.'''
-        raise Exception('Not implemented yet.')
+        return self.__resthelper('delete',
+                                 '/domains/' + domain + '/vanity_name_servers')
 
     ###########################################################################
     # CONTACTS                                                                #
