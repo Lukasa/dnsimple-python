@@ -589,7 +589,7 @@ class DNSimple(object):
         # For the moment, this URI does not work unless it ends in .json.
         # DNSimple have been informed about this inconsistency.
         return self.__resthelper('get',
-                                 '/extended_attributes/' + tld + '.json')
+                                 '/extended_attributes/' + tld)
 
     ###########################################################################
     # WHOIS PRIVACY PROTECTION                                                #
