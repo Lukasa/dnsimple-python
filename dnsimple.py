@@ -599,13 +599,15 @@ class DNSimple(object):
         '''Turn on WHOIS privacy protection for a given domain.
 
         domain must be the domain name or id.'''
-        raise Exception('Not implemented yet.')
+        return self.__resthelper('post',
+                                 '/domains/' + domain + '/whois_privacy')
 
     def disable_privacy_protection(self, domain):
         '''Turn off WHOIS privacy protection for a given domain.
 
         domain must be the domain name or id.'''
-        raise Exception('Not implemented yet.')
+        return self.__resthelper('delete',
+                                 '/domains/' + domain + '/whois_privacy')
 
     ###########################################################################
     # SHARING                                                                 #
