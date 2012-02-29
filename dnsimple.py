@@ -586,7 +586,10 @@ class DNSimple(object):
         top-level domain.
 
         tld must be the relevant top-level domain.'''
-        raise Exception('Not implemented yet.')
+        # For the moment, this URI does not work unless it ends in .json.
+        # DNSimple have been informed about this inconsistency.
+        return self.__resthelper('get',
+                                 '/extended_attributes/' + tld + '.json')
 
     ###########################################################################
     # WHOIS PRIVACY PROTECTION                                                #
