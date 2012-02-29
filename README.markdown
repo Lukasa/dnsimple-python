@@ -31,7 +31,7 @@ Create a DNSimple object, using your username and password.
 
 Just run:
 
-	domains = dns.getdomains()
+	domains = dns.getdomain()
 
 Results appear as list of Python dicts:
 
@@ -59,7 +59,7 @@ Results appear as list of Python dicts:
 
 ### Check out a specific domain
 
-	dns.getdomain('mikemaccana.com')
+	dns.get_domain('mikemaccana.com')
 
 Results are the same as getdomains() above, but only show the domain specified.
 
@@ -71,9 +71,13 @@ Just run:
 
 This will register 'newdomain.com', automatically picking the registrant\_id from your first domain. To specify a particularly registrant\_id, just run:
 
-	dns.register('newdomain.com',99)
+	dns.register_domain('newdomain.com', 99)
 
 Responses will be in a dictionary describing the newly created domain, same as the getdomain() above.
+
+### Going further
+
+More complicated tasks can be performed on domains. Additionally, you can manage users, templates, records and SSL certificates. Currently, the best documentation is the source: I'm working on docs.
 	
 ### License
 

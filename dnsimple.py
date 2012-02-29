@@ -66,28 +66,28 @@ class DNSimple(object):
     # DOMAINS                                                                 #
     ###########################################################################
     
-    def getdomain(self,domain=""):
+    def get_domain(self,domain=""):
         '''Get either a specific domain or all domains in your account.
         
         domain may be absent, blank, the name of a domain or the id of a
         domain'''
         return self.__resthelper('get', '/domains/' + domain)
 
-    def createdomain(self, domainname):
+    def create_domain(self, domainname):
         '''Create a single domain in DNSimple in your account.'''
         postdata = {"domain": {"name": domainname}} 
         return self.__resthelper('post', '/domains', data = postdata)
 
-    def checkdomain(self, domainname):
+    def check_domain(self, domainname):
         '''Check if a given domain is available for registration.'''
         return self.__resthelper('get',
                                  '/domains/' + domainname + '/check',
                                  expect_404=True)
 
-    def registerdomain(self,
-                       domainname,
-                       registrant_id="",
-                       extended_attributes={}):
+    def register_domain(self,
+                        domainname,
+                        registrant_id="",
+                        extended_attributes={}):
         '''Register a domain name with DNSimple and the appropriate domain
         registry.
         
@@ -114,7 +114,7 @@ class DNSimple(object):
                                  '/domain_registrations',
                                  data = postdata)
 
-    def transferdomain(self, domainname, registrant_id, authdata=""):
+    def transfer_domain(self, domainname, registrant_id, authdata=""):
         '''Transfer a domain name from another domain registrar into DNSimple.
 
         Some TLDs require authorization codes. If it does, it's your job to
@@ -130,7 +130,7 @@ class DNSimple(object):
                                  '/domain_transfers',
                                  data = postdata)        
 
-    def renewdomain(self, domainname, renew_whois=False):
+    def renew_domain(self, domainname, renew_whois=False):
         '''Renew a domain name in your account.
         
         domainname must be the domain name
@@ -162,7 +162,7 @@ class DNSimple(object):
         return self.__resthelper('delete',
                                  '/domains/' + domain + '/auto_renewal')
     
-    def deletedomain(self, domain):
+    def delete_domain(self, domain):
         '''Delete the given domain from your account.
         
         domain must be the domain name or domain id.'''
@@ -215,7 +215,7 @@ class DNSimple(object):
     # SERVICES                                                                #
     ###########################################################################
 
-    def getservices(self, serviceid=""):
+    def get_services(self, serviceid=""):
         '''Describe all services or a particular service.'''
         return self.__resthelper('get', '/services/' + serviceid)
 
