@@ -541,20 +541,41 @@ class DNSimple(object):
 
         template must be the short name or id for a template.
         record_id must be absent, the empty string or the record id.'''
-        raise Exception('Not implemented yet.')
+        return self.__resthelper('get',
+                                 ('/templates/' + template + 
+                                 '/template_records/' + record_id))
 
-    def create_template_record(self, template):
+    def create_template_record(self,
+                               template,
+                               name,
+                               record_type,
+                               content,
+                               ttl="",
+                               prio=""):
         '''Create a template record in the given template.
 
         template must be the short name or id of the template.'''
-        raise Exception('Not implemented yet.')
+        postdata = {"dns_template_record": {"name"       : name,
+                                            "record_type": record_type,
+                                            "content"    : content}}
+        if ttl:
+            (postdata["dns_template_record"])["ttl"] = ttl
+
+        if prio:
+            (postdata["dns_template_record"])["prio"] = prio
+
+        return self.__resthelper('post',
+                                 '/templates/' + template + '/template_records',
+                                 data = postdata)
 
     def delete_template_record(self, template, record_id):
         '''Delete a specific template record.
 
         template must be the short name or id of the template.
         record_id must be the record id.'''
-        raise Exception('Not implemented yet.')
+        return self.__resthelper('delete',
+                                 ('/templates/' + template +
+                                 '/template_records/' + record_id))
 
     ###########################################################################
     # EXTENDED ATTRIBUTES                                                     #
