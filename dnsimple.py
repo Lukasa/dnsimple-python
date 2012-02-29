@@ -684,6 +684,14 @@ class DNSimple(object):
     # USERS                                                                   #
     ###########################################################################
 
-    def create_user_account(self):
-        '''Provision a new user account.'''
-        raise Exception('Not implemented yet.')
+    def create_user_account(self, email, password):
+        '''Provision a new user account.
+        
+        This method DOES NOT CONFIRM passwords. Be sure you've submitted the
+        right password.'''
+        postdata = {"user": {"email"                : email,
+                             "password"             : password,
+                             "password_confirmation": password}}
+        return self.__resthelper('post',
+                                 '/users',
+                                 data = postdata)
