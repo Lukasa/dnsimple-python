@@ -648,15 +648,27 @@ class DNSimple(object):
 
         domain must be the domain name or id.
         cert_id must be absent, the empty string, or the certificate id.'''
-        raise Exception('Not implemented yet.')
+        return self.__resthelper('get',
+                                 ('/domains/' + domain +
+                                  '/certificates/' + cert_id))
 
-    def purchase_ssl_certificate_for_domain(self, domain):
+    def purchase_ssl_certificate_for_domain(self,
+                                            domain,
+                                            name,
+                                            contact_id,
+                                            csr=""):
         '''Purchase an SSL certificate for a given domain. This is the first
         step in buying a certificate. For more information on the correct
         process, see https://dnsimple.com/documentation/api
         
         domain must be the domain name or id.'''
-        raise Exception('Not implemented yet.')
+        postdata = {"certificate": {"name"      : name,
+                                    "contact_id": contact_id}}
+        if csr:
+            (postdata["certificate"])["csr"] = csr
+
+        return self.__resthelper('post',
+                                 '/domains/' + domain + '/certificates')
 
     def submit_ssl_certificate(self, domain, cert_id):
         '''Submit a purchased certificate for signing by the cert authority.
@@ -664,7 +676,9 @@ class DNSimple(object):
         domain must be the domain name or id.
         cert_id must be the id for the certificate created by purchasing it.
         '''
-        raise Exception('Not implemented yet.')
+        return self.__resthelper('put',
+                                 ('/domains/' + domain + '/certificates/' +
+                                 cert_id + '/submit'))
 
     ###########################################################################
     # USERS                                                                   #
