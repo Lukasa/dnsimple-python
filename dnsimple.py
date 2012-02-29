@@ -617,20 +617,26 @@ class DNSimple(object):
         '''List all of the current members for a domain.
 
         domain must be the domain name or id.'''
-        raise Exception('Not implemented yet.')
+        return self.__resthelper('get',
+                                 '/domains/' + domain + '/memberships')
 
-    def add_domain_member(self, domain):
+    def add_domain_member(self, domain, email):
         '''Add another DNSimple customer to a domain's memberships.
 
         domain must be the domain name or id.'''
-        raise Exception('Not implemented yet.')
+        postdata = {"membership": {"email": email}}
+        return self.__resthelper('post',
+                                 '/domains/' + domain + '/memberships')
+        
     
     def remove_domain_member(self, domain, email):
         '''Remove a DNSimple customer from the domain's memberships.
 
         domain must be the domain name or id.
         email must be the email address of the member.'''
-        raise Exception('Not implemented yet.')
+        return self.__resthelper('delete',
+                                 ('/domains/' + domain + 
+                                  '/memberships/' + email))
 
     ###########################################################################
     # SSL CERTIFICATES                                                        #
